@@ -9,9 +9,11 @@ from cloudops.models.health import HealthResult
 class LambdaHealthCheck(HealthCheck):
     """Check the accessibility of an AWS Lambda function."""
 
-    def __init__(self, function_name: str) -> None:
+    #def __init__(self, function_name: str) -> None:
+    def __init__(self, function_name: str, region_name: str) -> None:
         self.function_name = function_name
-        self.client = boto3.client("lambda")
+        #self.client = boto3.client("lambda")
+        self.client = boto3.client("lambda", region_name=region_name)
 
     def check(self) -> HealthResult:
         start = perf_counter()

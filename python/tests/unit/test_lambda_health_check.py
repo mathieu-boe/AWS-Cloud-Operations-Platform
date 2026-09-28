@@ -4,6 +4,7 @@ import zipfile
 import boto3
 from moto import mock_aws
 
+from cloudops.config import Settings
 from cloudops.health_checks.lambda_check import LambdaHealthCheck
 
 
@@ -37,7 +38,13 @@ def test_lambda_health_check_reports_healthy_function() -> None:
         Code={"ZipFile": create_lambda_zip()},
     )
 
-    check = LambdaHealthCheck(function_name="cloudops-health")
+    settings = Settings()
+
+    #check = LambdaHealthCheck(function_name="cloudops-health")
+    check = LambdaHealthCheck(
+        function_name="cloudops-health",
+        region_name=settings.aws_region,
+    )
 
     result = check.check()
 
@@ -48,7 +55,13 @@ def test_lambda_health_check_reports_healthy_function() -> None:
 
 @mock_aws
 def test_lambda_health_check_reports_missing_function_as_unhealthy() -> None:
-    check = LambdaHealthCheck(function_name="does-not-exist")
+    settings = Settings()
+
+    #check = LambdaHealthCheck(function_name="does-not-exist")
+    check = LambdaHealthCheck(
+        function_name="does-not-exist",
+        region_name=settings.aws_region,
+    )
 
     result = check.check()
 
