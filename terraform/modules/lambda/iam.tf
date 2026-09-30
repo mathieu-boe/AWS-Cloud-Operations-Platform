@@ -15,7 +15,7 @@ resource "aws_iam_role" "this" {
   name               = "${var.function_name}-role"
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 
-   tags = {
+  tags = {
     Project     = "AWS-Cloud-Operations-Platform"
     Environment = "dev"
     ManagedBy   = "Terraform"

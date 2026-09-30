@@ -7,7 +7,7 @@ resource "aws_lambda_function" "this" {
   filename         = var.filename
   source_code_hash = filebase64sha256(var.filename)
 
-    tags = {
+  tags = {
     Project     = "AWS-Cloud-Operations-Platform"
     Environment = "dev"
     ManagedBy   = "Terraform"

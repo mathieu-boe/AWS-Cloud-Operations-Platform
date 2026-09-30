@@ -1,10 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-variable "aws_region" {
-  description = "AWS region used by the Lambda infrastructure."
-  type        = string
-}
-
 resource "aws_iam_policy" "terraform_lambda" {
   name        = "GitHubActions-Terraform-Lambda"
   description = "Scoped Terraform permissions for GitHub Actions Lambda infrastructure"
@@ -44,14 +39,23 @@ resource "aws_iam_policy" "terraform_lambda" {
           "iam:ListRoleTags",
           "iam:ListAttachedRolePolicies",
           "iam:AttachRolePolicy",
-          "iam:DetachRolePolicy",
-          "iam:GetPolicy",
-          "iam:GetPolicyVersion"
+          "iam:DetachRolePolicy"
         ]
 
         Resource = [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.lambda_execution_role_name}"
         ]
+      },
+      {
+        Sid    = "IamPolicyRead"
+        Effect = "Allow"
+
+        Action = [
+          "iam:GetPolicy",
+          "iam:GetPolicyVersion"
+        ]
+
+        Resource = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*"
       },
       {
         Sid    = "PassLambdaExecutionRole"
