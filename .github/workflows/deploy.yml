@@ -39,4 +39,11 @@ jobs:
         run: terraform init -backend=false
 
       - name: Terraform Plan
-        run: terraform plan
+#        run: terraform plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload Terraform Plan
+        uses: actions/upload-artifact@v5
+        with:
+          name: terraform-plan
+          path: terraform/environments/dev/tfplan
